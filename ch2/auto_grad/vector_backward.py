@@ -3,7 +3,7 @@ import torch
 x = torch.arange(4.0, requires_grad=True)
 y = x * x
 
-y.backward(torch.ones_like(x))
+y.backward(torch.ones_like(y))
 print(f'x: {x}')
 print(f'y: {y}')
 print(f'x.grad: {x.grad}')
