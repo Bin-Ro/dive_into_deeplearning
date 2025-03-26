@@ -1,4 +1,5 @@
 import torch
+import random
 
 def synthetic_data(w, b, num_examples):
     X = torch.randn(num_examples, len(w))
@@ -14,6 +15,7 @@ features, labels = synthetic_data(true_w, true_b, 1000)
 def data_iter(batch_size, features, labels):
     num_examples = len(features)
     indices = list(range(num_examples))
+    random.shuffle(indices)
     for i in range(0, num_examples, batch_size):
         ind = torch.tensor(indices[i : min(i + batch_size, num_examples)])
         yield features[ind], labels[ind]
