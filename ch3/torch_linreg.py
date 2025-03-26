@@ -38,7 +38,7 @@ for epoch in range(num_epochs):
         trainer.zero_grad()
         l.backward()
         trainer.step()
-    with torch.no_grad():
+    with torch.inference_mode():
         print(f'epoch: {epoch}, loss: {loss(net(features), labels)}')
     
 print(f'true_w: {true_w}, w: {net[0].weight.data}')

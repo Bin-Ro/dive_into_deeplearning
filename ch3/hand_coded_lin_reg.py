@@ -32,7 +32,7 @@ def square_loss(y_hat, y):
     return ((y_hat - y.reshape(y_hat.shape))**2).mean()
 
 def sgd(params, lr):
-    with torch.no_grad():
+    with torch.inference_mode():
         for param in params:
             param -= lr * param.grad
             param.grad.zero_()
@@ -49,7 +49,7 @@ for epoch in range(num_epochs):
         l = loss(net(X), y)
         l.backward()
         sgd([w, b], lr)
-    with torch.no_grad():
+    with torch.inference_mode():
         print(f'epoch: {epoch}, loss: {loss(net(features), labels)}')
 
 print(f'true_w: {true_w}, w: {w}')
