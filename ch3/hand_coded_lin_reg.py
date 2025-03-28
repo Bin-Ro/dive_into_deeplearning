@@ -29,7 +29,7 @@ def linreg(X):
     return X @ w + b
 
 def square_loss(y_hat, y):
-    return ((y_hat - y.reshape(y_hat.shape))**2).mean()
+    return (y_hat - y.reshape(y_hat.shape)).square().mean()
 
 def sgd(params, lr):
     with torch.inference_mode():
