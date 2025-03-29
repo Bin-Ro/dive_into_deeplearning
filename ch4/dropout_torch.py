@@ -29,7 +29,7 @@ def accuracy(y_hat, y):
     cmp = y_hat.type(y.dtype) == y
     return float(cmp.type(y.dtype).sum())
 
-net = nn.Sequential(nn.Flatten(), nn.Linear(num_inputs, num_hiddens1), nn.ReLU(), nn.Dropout(dropout1), nn.Linear(num_hiddens1, num_hiddens2), nn.ReLU(), nn.Dropout(), 
+net = nn.Sequential(nn.Flatten(), nn.Linear(num_inputs, num_hiddens1), nn.ReLU(), nn.Dropout(dropout1), nn.Linear(num_hiddens1, num_hiddens2), nn.ReLU(), nn.Dropout(dropout2), 
         nn.Linear(num_hiddens2, num_outputs))
 
 num_epochs, lr, batch_size = 10, .5, 256
