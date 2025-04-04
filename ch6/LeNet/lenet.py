@@ -26,10 +26,10 @@ def accuracy(y_hat, y):
 
 def evaluate_accuracy(net, data_iter):
     with torch.inference_mode():
-        metric = torch.zeros(2, dtype=torch.float32)
+        metric = torch.zeros(2, dtype=torch.float32, device='cuda')
         for X, y in data_iter:
             X, y = X.to('cuda'), y.to('cuda')
-            metric += torch.tensor([accuracy(net(X), y), y.numel()])
+            metric += torch.tensor([accuracy(net(X), y), y.numel()], device='cuda')
     return metric[0] / metric[1]
 
 lr = 1e-2
