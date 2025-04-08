@@ -47,22 +47,26 @@ batch_size = 128
 
 train_iter, test_iter = load_data_fashion_mnist(batch_size, resize=224)
 
-lr = 1e-2
+lr = 1e-3
 num_epochs = 10
 
 trainer = torch.optim.AdamW(net.parameters(), lr=lr)
 loss = nn.CrossEntropyLoss()
 
-print(f'train_acc: {evaluate_accuracy(net, train_iter)}')
-print(f'test_acc: {evaluate_accuracy(net, test_iter)}\n')
+net.eval()
+with torch.inference_mode():
+    print(f'train_acc: {evaluate_accuracy(net, train_iter)}')
+    print(f'test_acc: {evaluate_accuracy(net, test_iter)}\n')
 
 for epoch in range(num_epochs):
+    net.train()
     for X, y in train_iter:
         X, y = X.to('cuda'), y.to('cuda') 
         l = loss(net(X), y)
         trainer.zero_grad()
         l.backward()
         trainer.step()
+    net.eval()
     with torch.inference_mode():
         print(f'epoch: {epoch + 1}, train_acc: {evaluate_accuracy(net, train_iter)}')
         print(f'epoch: {epoch + 1}, test_acc: {evaluate_accuracy(net, test_iter)}\n')
