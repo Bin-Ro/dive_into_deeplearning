@@ -23,21 +23,28 @@ net = nn.Sequential(nn.Linear(2, 1))
 net[0].weight.data.normal_(0, .01)
 net[0].bias.data.fill_(0)
 
-trainer = torch.optim.SGD(net.parameters(), lr=.03)
+trainer = torch.optim.AdamW(net.parameters())
+print(f'trainer: {trainer}')
 
-num_epochs = 3
+num_epochs = 1000
 batch_size = 10
 
 data_iter = load_array((features, labels), batch_size)
 
 loss = nn.MSELoss()
 
+net.eval()
+with torch.inference_mode():
+    print(f'loss: {loss(net(features), labels)}')
+
 for epoch in range(num_epochs):
+    net.train()
     for X, y in data_iter:
         l = loss(net(X), y)
         trainer.zero_grad()
         l.backward()
         trainer.step()
+    net.eval()
     with torch.inference_mode():
         print(f'epoch: {epoch}, loss: {loss(net(features), labels)}')
     

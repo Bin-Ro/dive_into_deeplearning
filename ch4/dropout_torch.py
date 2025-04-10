@@ -32,13 +32,13 @@ def accuracy(y_hat, y):
 net = nn.Sequential(nn.Flatten(), nn.Linear(num_inputs, num_hiddens1), nn.ReLU(), nn.Dropout(dropout1), nn.Linear(num_hiddens1, num_hiddens2), nn.ReLU(), nn.Dropout(dropout2), 
         nn.Linear(num_hiddens2, num_outputs))
 
-num_epochs, lr, batch_size = 10, .5, 256
+num_epochs, batch_size = 10, 256
 
 loss = nn.CrossEntropyLoss()
 
 train_iter, test_iter = load_data_fashion_mnist(batch_size)
 
-trainer = torch.optim.SGD(net.parameters(), lr=lr)
+trainer = torch.optim.AdamW(net.parameters())
 
 net.eval()
 print(f'train_acc: {evaluate_accuracy(net, train_iter)}')

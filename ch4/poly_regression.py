@@ -50,15 +50,17 @@ test_iter = load_array((test_features, test_labels.reshape(-1, 1)), batch_size=1
 loss = nn.MSELoss()
 net = nn.Sequential(nn.Linear(input_shape, 1, bias=False))
 
-trainer = torch.optim.SGD(net.parameters(), lr=.01)
+trainer = torch.optim.AdamW(net.parameters())
 
-num_epochs = 400
+num_epochs = 4000
 for epoch in range(num_epochs):
+    net.train()
     for X, y in train_iter:
         l = loss(net(X), y)
         trainer.zero_grad()
         l.backward()
         trainer.step()
+    net.eval()
     with torch.inference_mode():
         print(f'epoch: {epoch + 1}, train_acc: {evaluate_loss(net, train_iter, loss)}')
         print(f'epoch: {epoch + 1}, test_acc: {evaluate_loss(net, test_iter, loss)}', '\n')

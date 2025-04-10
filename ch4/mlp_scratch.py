@@ -47,7 +47,7 @@ def net(X):
 
 loss = nn.CrossEntropyLoss()
 
-trainer = torch.optim.SGD([W1, b1, W2, b2], lr=.1)
+trainer = torch.optim.AdamW([W1, b1, W2, b2])
 
 print(f'train_acc: {evaluate_accuracy(net, train_iter)}')
 print(f'test_acc: {evaluate_accuracy(net, test_iter)}', '\n')

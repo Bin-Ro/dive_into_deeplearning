@@ -59,26 +59,26 @@ class Net(nn.Module):
 
 net = Net(num_inputs, num_outputs, num_hiddens1, num_hiddens2)
 
-num_epochs, lr, batch_size = 10, .5, 256
+num_epochs, batch_size = 10, 256
 
 loss = nn.CrossEntropyLoss()
 
 train_iter, test_iter = load_data_fashion_mnist(batch_size)
 
-trainer = torch.optim.SGD(net.parameters(), lr=lr)
+trainer = torch.optim.AdamW(net.parameters())
 
 net.training = False
 print(f'train_acc: {evaluate_accuracy(net, train_iter)}')
 print(f'test_acc: {evaluate_accuracy(net, test_iter)}', '\n')
 
 for epoch in range(num_epochs):
+    net.training = True
     for X, y in train_iter:
-        net.training = True
         l = loss(net(X), y)
         trainer.zero_grad()
         l.backward()
         trainer.step()
+    net.training = False
     with torch.inference_mode():
-        net.training = False
         print(f'epoch: {epoch + 1}, train_acc: {evaluate_accuracy(net, train_iter)}')
         print(f'epoch: {epoch + 1}, test_acc: {evaluate_accuracy(net, test_iter)}', '\n')

@@ -20,8 +20,6 @@ test_data = synthetic_data(true_w, true_b, n_test)
 train_iter = load_array(train_data, batch_size)
 test_iter = load_array(test_data, batch_size, is_train=False)
 
-num_epochs = 100
-lr = .003
 
 def evaluate_loss(net, data_iter, loss):
     if isinstance(net, nn.Module):
@@ -36,18 +34,24 @@ def evaluate_loss(net, data_iter, loss):
 net = nn.Sequential(nn.Linear(num_inputs, 1))
 loss = nn.MSELoss()
 
-wd = 3
-trainer = torch.optim.SGD([{'params': net[0].weight, 'weight_decay': wd}, {'params': net[0].bias}], lr=lr)
+trainer = torch.optim.AdamW(net.parameters())
+print(f'trainer: {trainer}')
 
-print(f'train_loss: {evaluate_loss(net, train_iter, loss)}')
-print(f'test_loss: {evaluate_loss(net, test_iter, loss)}', '\n')
+num_epochs = 1000
+
+net.eval()
+with torch.inference_mode():
+    print(f'train_loss: {evaluate_loss(net, train_iter, loss)}')
+    print(f'test_loss: {evaluate_loss(net, test_iter, loss)}', '\n')
 
 for epoch in range(num_epochs):
+    net.train()
     for X, y in train_iter:
         l = loss(net(X), y)
         trainer.zero_grad()
         l.backward()
         trainer.step()
+    net.eval()
     with torch.inference_mode():
         print(f'epoch: {epoch + 1}, train_loss: {evaluate_loss(net, train_iter, loss)}')
         print(f'epoch: {epoch + 1}, test_loss: {evaluate_loss(net, test_iter, loss)}', '\n')

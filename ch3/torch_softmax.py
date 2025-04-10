@@ -41,18 +41,23 @@ net.apply(init_weight)
 
 loss = nn.CrossEntropyLoss()
 
-trainer = torch.optim.SGD(net.parameters(), lr=.1)
+trainer = torch.optim.AdamW(net.parameters())
+print(f'trainer: {trainer}')
 
-print(f'train_acc: {evaluate_accuracy(net, train_iter)}')
-print(f'test_acc: {evaluate_accuracy(net, test_iter)}', '\n')
+net.eval()
+with torch.inference_mode():
+    print(f'train_acc: {evaluate_accuracy(net, train_iter)}')
+    print(f'test_acc: {evaluate_accuracy(net, test_iter)}', '\n')
 
 num_epochs = 10
 for epoch in range(num_epochs):
+    net.train()
     for X, y in train_iter:
         l = loss(net(X), y)
         trainer.zero_grad()
         l.backward()
         trainer.step()
+    net.eval()
     with torch.inference_mode():
         print(f'epoch: {epoch + 1}, train_acc: {evaluate_accuracy(net, train_iter)}')
         print(f'epoch: {epoch + 1}, test_acc: {evaluate_accuracy(net, test_iter)}', '\n')
