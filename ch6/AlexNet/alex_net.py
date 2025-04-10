@@ -47,10 +47,10 @@ batch_size = 128
 
 train_iter, test_iter = load_data_fashion_mnist(batch_size, resize=224)
 
-lr = 1e-3
 num_epochs = 10
 
-trainer = torch.optim.AdamW(net.parameters(), lr=lr)
+trainer = torch.optim.AdamW(net.parameters())
+print(f'trainer: {trainer}')
 loss = nn.CrossEntropyLoss()
 
 net.eval()

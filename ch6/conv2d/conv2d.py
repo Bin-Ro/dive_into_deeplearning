@@ -31,9 +31,11 @@ print(f'Y: {Y}')
 
 conv2d = Conv2D(kernel_size=(1, 2), use_bias=False)
 loss = nn.MSELoss()
-trainer = torch.optim.AdamW(conv2d.parameters(), lr=1e-1)
+trainer = torch.optim.AdamW(conv2d.parameters())
+print(f'trainer: {trainer}')
 
-for epoch in range(100):
+conv2d.train()
+for epoch in range(20000):
     l = loss(conv2d(X), Y)
     trainer.zero_grad()
     l.backward()

@@ -29,7 +29,6 @@ small_conv_arch = [(pair[0], pair[1] // 4) for pair in conv_arch]
 net = vgg(small_conv_arch)
 net.to('cuda')
 
-lr = 1e-2
 num_epochs = 10
 batch_size = 128
 
@@ -58,7 +57,8 @@ def accuracy(y_hat, y):
 train_iter, test_iter = load_data_fashion_mnist(batch_size, resize=224)
 
 loss = nn.CrossEntropyLoss()
-trainer = torch.optim.AdamW(net.parameters(), lr=lr)
+trainer = torch.optim.AdamW(net.parameters())
+print(f'trainer: {trainer}')
 
 net.eval()
 with torch.inference_mode():
