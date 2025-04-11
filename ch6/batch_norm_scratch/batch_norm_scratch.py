@@ -116,3 +116,6 @@ for epoch in range(num_epochs):
     with torch.inference_mode():
         print(f'epoch: {epoch + 1}, train_acc: {evaluate_accuracy(net, train_iter)}')
         print(f'epoch: {epoch + 1}, test_acc: {evaluate_accuracy(net, test_iter)}\n')
+
+print(f'net[1].gamma.view(-1): {net[1].gamma.view(-1)}')
+print(f'net[1].beta.view(-1): {net[1].beta.view(-1)}')
