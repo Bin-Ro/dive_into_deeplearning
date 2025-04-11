@@ -62,6 +62,10 @@ net = nn.Sequential(nn.Conv2d(1, 6, kernel_size=5, padding=2),
         nn.Linear(84, 10))
 
 net = net.to('cuda')
+print(f'net: {net}')
+
+for name, param in net.named_parameters():
+    print(f'{name}: {param.shape} {param.device}')
 
 def load_data_fashion_mnist(batch_size, resize=None):
     trans = [transforms.ToTensor()]
