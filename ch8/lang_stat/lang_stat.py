@@ -95,12 +95,22 @@ def count_corpus(tokens):
 tokens = tokenize(read_time_machine(cache_dir='../../ch8/load_time_machine/data'))
 corpus = [token for line in tokens for token in line]
 vocab = Vocab(corpus)
-
 freqs = [freq for _, freq in vocab.token_freqs]
 
-plt.plot(freqs)
+bigram_tokens = [pair for pair in zip(corpus[:-1], corpus[1:])]
+bigram_vocab = Vocab(bigram_tokens)
+bigram_freqs = [freq for _, freq in bigram_vocab.token_freqs]
+
+trigram_tokens = [triple for triple in zip(corpus[:-2], corpus[1:-1], corpus[2:])]
+trigram_vocab = Vocab(trigram_tokens)
+trigram_freqs = [freq for _, freq in trigram_vocab.token_freqs]
+
+plt.loglog(freqs, label='freqs')
+plt.loglog(bigram_freqs, label='bigram_freqs')
+plt.loglog(trigram_freqs, label='trigram_freqs')
 plt.grid(True)
 plt.xlabel('idx')
 plt.ylabel('freqency')
 plt.title('freqency')
+plt.legend()
 plt.show()
