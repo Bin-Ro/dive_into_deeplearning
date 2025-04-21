@@ -89,6 +89,9 @@ class Vocab:
     def token_freqs(self):
         return self._token_freqs
 
+    def __iter__(self):
+        return iter(self.token_to_idx)
+
 
 def count_corpus(tokens):
     if len(tokens) == 0 or isinstance(tokens[0], list):
@@ -115,3 +118,6 @@ corpus, vocab = load_corpus_time_machine()
 print(f'len(corpus): {len(corpus)}')
 print(f'len(vocab): {len(vocab)}')
 print(f'vocab.token_freqs: {vocab.token_freqs}')
+
+for t in vocab:
+    print(t)
