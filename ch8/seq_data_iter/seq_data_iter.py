@@ -122,12 +122,31 @@ def seq_data_iter_sequential(corpus, batch_size, num_steps):
         Y = Ys[:, i: i + num_steps]
         yield X, Y
 
-my_seq = list(range(35))
+def load_corpus_time_machine(max_tokens=-1):
+    lines = read_time_machine(cache_dir='../load_time_machine/data')
+    tokens = tokenize(lines, 'char')
+    vocab = Vocab(tokens)
+    corpus = [vocab[token] for line in tokens for token in line]
+    if max_tokens > 0:
+        count_corpus = count_corpus[:max_tokens]
+    return corpus, vocab
 
- #for X, Y in seq_data_iter_random(my_seq, batch_size=2, num_steps=5):
- #    print(f'X: {X}')
- #    print(f'Y: {Y}\n')
+class SeqDataLoader:
+    def __init__(self, batch_size, num_steps, use_random_iter, max_tokens):
+        self.data_iter_fn = seq_data_iter_random if use_random_iter else seq_data_iter_sequential
+        self.corpus, self.vocab = load_corpus_time_machine(max_tokens)
+        self.batch_size, self.num_steps = batch_size, num_steps
 
-for X, Y in seq_data_iter_sequential(my_seq, batch_size=2, num_steps=5):
+    def __iter__(self):
+        return self.data_iter_fn(self.corpus, self.batch_size, self.num_steps)
+
+def load_data_time_machine(batch_size, num_steps, use_random_iter=False, max_tokens=-1):
+    data_iter = SeqDataLoader(batch_size, num_steps, use_random_iter, max_tokens)
+    return data_iter, data_iter.vocab
+
+seq_iter, vocab = load_data_time_machine(batch_size=2, num_steps=5, use_random_iter=True)
+
+for i, (X, Y) in enumerate(seq_iter):
+    print(f'i: {i}')
     print(f'X: {X}')
     print(f'Y: {Y}\n')
