@@ -159,3 +159,13 @@ for _ in range(num_preds):
 
 res = ''.join([vocab.idx_to_token[i] for i in outputs])
 print(res)
+
+def grad_clipping(net, theta):
+    if isinstance(net, nn.Module):
+        params = [p for p in net.parameters() if p.requires_grad]
+    else:
+        params = net.params
+    norm = torch.sqrt(sum(torch.sum(p.grad**2) for p in params))
+    if norm > theta:
+        for param in params:
+            param.grad[:] *= theta / norm
