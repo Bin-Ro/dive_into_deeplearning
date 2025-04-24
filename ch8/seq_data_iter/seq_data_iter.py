@@ -150,3 +150,4 @@ for i, (X, Y) in enumerate(seq_iter):
     print(f'i: {i}')
     print(f'X: {X}')
     print(f'Y: {Y}\n')
+print(f'len(vocab): {len(vocab)}')
